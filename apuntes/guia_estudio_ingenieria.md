@@ -31,14 +31,14 @@ Esta guía se actualiza conforme avanzas. El detalle técnico de cada tema (coma
 - [x] Instalar VirtualBox + Kali Linux
 - [x] Instalar VS Code
 - [x] Instalar PostgreSQL
-- [ ] Crear cuenta en GitHub
-- [ ] Crear cuenta en TryHackMe (gratuita)
+- [x] Crear cuenta en GitHub
+- [x] Crear cuenta en TryHackMe (gratuita)
 
 **Checkpoint:**
 - [x] Puedo encender/apagar mi VM sin problemas
 - [x] Sé crear, mover, copiar y borrar archivos y carpetas por terminal
 - [x] Entiendo la diferencia entre usuario normal y `sudo`
-- [ ] Tengo un repositorio vacío creado en GitHub
+- [x] Tengo un repositorio vacío creado en GitHub
 
 ---
 
