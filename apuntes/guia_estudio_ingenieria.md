@@ -61,21 +61,26 @@ Esta guía se actualiza conforme avanzas. El detalle técnico de cada tema (coma
 - [x] `pwd`, `ls`, `cd`, `mkdir`, `touch`, `cp`, `mv`, `rm`, `cat`, `nano`
 - [x] Rutas absolutas vs relativas
 - [x] Qué es un shell, terminología comando/bandera/argumento, `man`/`--help`
-- [ ] Comodines `*`, `?`
+- [x] Comodines `*`, `?`
 
 **Permisos y procesos** ✅
 - [x] `chmod` y notación numérica (700, 644, 755, 777, 100)
 - [x] `ps aux`, `top`, `kill`, procesos en segundo plano (`&`)
 - [x] `grep` como filtro de texto
-- [ ] `chown`
-- [ ] Redirección `>`, `>>`
-- [ ] `Ctrl+Z`, `jobs`
+- [x] `chown`
+- [x] Redirección `>`, `>>`
+- [ ] `Ctrl+Z`, `jobs` (menor, se verá en scripting)
 
 **Redes básicas** ✅ COMPLETADO
 - [x] TCP vs UDP, qué es "listening"
 - [x] `ping`, `ip a`, `traceroute`, `netstat`
 - [x] Puerto, protocolo, IP pública vs privada, notación CIDR (`/24`)
 - [ ] Modelo TCP/IP y OSI completo, subnetting a profundidad (pendiente, se verá con Nmap)
+
+**Extra cubierto (fuera del plan original, valioso para el día a día)**
+- [x] Atajos de teclado en Bash
+- [x] Flujo completo de Git (add/commit/push, tokens, manejo de repos)
+- [x] Escritorio remoto (GNOME Remote Desktop)
 
 **Scripting en Bash** — pendiente
 - [ ] Variables, condicionales, loops
@@ -86,6 +91,7 @@ Esta guía se actualiza conforme avanzas. El detalle técnico de cada tema (coma
 - [x] Entiendo permisos `rwxr-xr-x`
 - [x] Sé usar `grep` para filtrar texto
 - [x] Explico qué es un puerto y una IP, diferencia TCP/UDP
+- [x] Sé subir cambios a mi repositorio con Git de forma autónoma
 - [ ] Escribí un script Bash funcional
 
 > Detalle completo con ejemplos: `apuntes_linux_terminal.md`

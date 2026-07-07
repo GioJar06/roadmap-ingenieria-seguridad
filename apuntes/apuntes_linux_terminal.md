@@ -13,7 +13,10 @@
 6. `grep` — filtro de texto
 7. Redes básicas
 8. Glosario de siglas
-9. Pendientes / próximos temas
+9. Atajos de teclado en Bash
+10. Git — flujo de trabajo y conceptos clave
+11. Escritorio remoto
+12. Pendientes / próximos temas
 
 ---
 
@@ -138,6 +141,53 @@ rm -r carpeta/     # SÍ funciona: borra la carpeta y TODO su contenido (recursi
 | `-d` | borra carpetas vacías (alternativa limitada a `-r`) |
 
 **El comando más temido de Linux — `sudo rm -rf /`:** borra el sistema operativo completo sin posibilidad de recuperación. Ubuntu pide confirmación extra (`--no-preserve-root`) precisamente por lo fácil que es correrlo por accidente (ej. con una variable vacía en un script: `rm -rf $VAR/`).
+
+### Comodines: `*` y `?`
+
+Sirven para referirte a varios archivos a la vez sin escribirlos uno por uno.
+
+```bash
+ls *.txt          # TODOS los archivos que terminen en .txt
+ls archivo*       # todo lo que EMPIECE con "archivo"
+rm *.log          # borra todos los archivos .log
+cp *.md carpeta/  # copia todos los archivos .md a otra carpeta
+```
+
+- `*` = cualquier cantidad de caracteres, incluyendo cero
+- `?` = exactamente un carácter, cualquiera que sea (ej. `archivo?.txt` coincide con `archivo1.txt`, `archivoA.txt`, pero no con `archivo10.txt`)
+
+### `chown` — cambiar el DUEÑO de un archivo
+
+Diferencia clave con `chmod`: `chmod` cambia **permisos** (qué se puede hacer), `chown` cambia **quién es el dueño** del archivo.
+
+```bash
+sudo chown otro_usuario archivo.txt              # cambia solo el dueño
+sudo chown otro_usuario:otro_grupo archivo.txt   # cambia dueño Y grupo a la vez
+sudo chown -R usuario carpeta/                   # aplica recursivamente a toda una carpeta
+```
+
+Casi siempre requiere `sudo`, porque reasignar de quién es un archivo es una acción sensible de seguridad. Caso de uso típico: un archivo descargado con `sudo` queda con dueño `root` en vez de tu usuario, y no puedes editarlo hasta reclamarlo con `chown`.
+
+### Redirección: `>` y `>>`
+
+Mandan la salida de un comando a un archivo, en vez de mostrarla en pantalla.
+
+```bash
+echo "Hola mundo" > saludo.txt    # > SOBRESCRIBE el archivo completo
+echo "Otra línea" >> saludo.txt   # >> AGREGA al final, sin borrar lo anterior
+```
+
+Ejemplo práctico:
+```bash
+ls -la > lista_archivos.txt        # guarda el resultado de ls -la en un archivo
+ps aux >> registro_procesos.txt    # agrega el resultado de ps aux a un archivo existente
+```
+
+**Diferencia con el pipe `|`:**
+- `|` manda la salida de un comando **a otro comando** (ej. `ps aux | grep sleep`)
+- `>` / `>>` manda la salida de un comando **a un archivo**
+
+Se pueden combinar: `ps aux | grep bash >> resumen.txt` — primero filtra con `grep`, luego agrega ese resultado ya filtrado al archivo.
 
 ---
 
@@ -339,13 +389,80 @@ Muestra qué puertos están abiertos y **escuchando** (listening) en tu propia m
 
 ---
 
-## 9. Pendientes / próximos temas
+## 9. Atajos de teclado en Bash
 
-- Redirección: `>`, `>>` (ya se usó `|` con grep, falta profundizar)
-- `chown` — cambiar el DUEÑO de un archivo (distinto de `chmod`)
-- Comodines: `*`, `?`
-- Subnetting e IPv6 a profundidad (junto con Nmap más adelante)
+| Atajo | Qué hace |
+|-------|----------|
+| `Ctrl + U` | Borra toda la línea desde el cursor hacia el inicio |
+| `Ctrl + K` | Borra toda la línea desde el cursor hacia el final |
+| `Ctrl + C` | Cancela el comando actual / interrumpe un proceso corriendo |
+| `Ctrl + L` | Limpia la pantalla (igual que escribir `clear`) |
+| `Ctrl + A` | Mueve el cursor al inicio de la línea |
+| `Ctrl + E` | Mueve el cursor al final de la línea |
+| `Ctrl + R` | Busca en el historial de comandos anteriores |
+| `Ctrl + W` | Borra la última palabra antes del cursor |
+| Flecha arriba/abajo | Navega entre comandos anteriores |
+| `Tab` | Autocompleta nombres de archivos/carpetas (úsalo siempre, evita errores de tipeo) |
+
+---
+
+## 10. Git — flujo de trabajo y conceptos clave
+
+### Flujo básico establecido
+
+```bash
+git add .                          # prepara TODOS los cambios de la carpeta actual para el commit
+git status                         # confirma qué se detectó antes de comitear (buen hábito, siempre revisar)
+git commit -m "mensaje descriptivo" # guarda los cambios preparados con un mensaje
+git push                           # sube los cambios a GitHub
+```
+
+**El punto `.` en `git add .`** significa "todo lo que esté en la carpeta actual y subcarpetas". Alternativas más específicas: `git add archivo.txt` (solo ese archivo) o `git add carpeta/` (solo esa carpeta).
+
+### Autenticación con Personal Access Token (PAT)
+
+GitHub ya no acepta la contraseña normal de la cuenta para operaciones de Git — se necesita un **token** generado en GitHub (Settings → Developer settings → Personal access tokens). Se usa en el campo de "contraseña" al hacer `git push`.
+
+Para no repetir la autenticación cada vez:
+```bash
+git config --global credential.helper store
+```
+Nota de seguridad: esto guarda el token en texto plano en `~/.git-credentials` — razonable si eres el único usuario de la máquina.
+
+### Moverte entre carpetas y repositorios
+
+- Git busca automáticamente la carpeta `.git` en el directorio actual o en cualquier carpeta padre — puedes estar en una subcarpeta del repo y los comandos de Git funcionan igual.
+- Cada repositorio clonado es independiente; puedes tener varios en distintas carpetas sin que se mezclen.
+- Antes de hacer cambios, confirma en qué repo estás:
+```bash
+pwd            # tu ubicación actual
+git remote -v  # a qué repositorio de GitHub está conectada esta carpeta
+```
+
+---
+
+## 11. Escritorio remoto (acceso a la laptop desde otra computadora)
+
+Para ver/controlar la laptop Ubuntu desde otra computadora en la misma red WiFi, se activó **GNOME Remote Desktop** (nativo de Ubuntu, en Configuración → Sistema → Escritorio remoto) — no se instaló `xrdp` por separado.
+
+**Conexión desde Windows:** `Windows + R` → `mstsc` → IP de la laptop → usuario/contraseña del sistema.
+
+**Consideraciones:**
+- La IP local de la laptop cambia según la red a la que se conecte (casa, escuela, etc.) — solo es accesible desde dentro de la misma red donde esté conectada.
+- Mientras el escritorio remoto esté activado, la laptop acepta conexiones en cualquier red donde se conecte — por seguridad, conviene desactivarlo en redes que no sean la de casa.
+- Pendiente de confirmar: si la opción de escritorio remoto permanece activada tras reiniciar, o si se debe reactivar manualmente cada vez.
+
+**Cambiar entre la sesión remota y la computadora local (desde Windows/mstsc):**
+- En pantalla completa: `Ctrl + Alt + Break` (o `Ctrl+Alt+Fn+B` en laptops sin tecla Break) saca la sesión a modo ventana
+- En modo ventana: `Alt+Tab` normal de Windows ya cambia entre la sesión remota y otras aplicaciones
+
+---
+
+## 12. Pendientes / próximos temas
+
 - Scripting básico en Bash (variables, condicionales, loops)
+- Confirmar persistencia del escritorio remoto tras reiniciar
+- Subnetting e IPv6 a profundidad (junto con Nmap más adelante)
 
 ---
 
