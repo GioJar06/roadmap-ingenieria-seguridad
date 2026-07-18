@@ -156,6 +156,12 @@ cp *.md carpeta/  # copia todos los archivos .md a otra carpeta
 - `*` = cualquier cantidad de caracteres, incluyendo cero
 - `?` = exactamente un carácter, cualquiera que sea (ej. `archivo?.txt` coincide con `archivo1.txt`, `archivoA.txt`, pero no con `archivo10.txt`)
 
+**Casos prácticos reales:**
+- Limpiar temporales antes de una prueba: `rm *.log`, `rm *.tmp`
+- Backup de todos los scripts de un tipo: `cp *.py respaldo/`
+- Revisar solo cierto tipo de archivo en una carpeta: `ls ~/Downloads/*.pdf`
+- Hacking ético: revisar de un jalón varios archivos de resultado de un escaneo: `cat scan_*.txt`
+
 ### `chown` — cambiar el DUEÑO de un archivo
 
 Diferencia clave con `chmod`: `chmod` cambia **permisos** (qué se puede hacer), `chown` cambia **quién es el dueño** del archivo.
@@ -166,7 +172,17 @@ sudo chown otro_usuario:otro_grupo archivo.txt   # cambia dueño Y grupo a la ve
 sudo chown -R usuario carpeta/                   # aplica recursivamente a toda una carpeta
 ```
 
-Casi siempre requiere `sudo`, porque reasignar de quién es un archivo es una acción sensible de seguridad. Caso de uso típico: un archivo descargado con `sudo` queda con dueño `root` en vez de tu usuario, y no puedes editarlo hasta reclamarlo con `chown`.
+Casi siempre requiere `sudo`, porque reasignar de quién es un archivo es una acción sensible de seguridad.
+
+**Casos prácticos reales:**
+- El más común: descargar/crear algo con `sudo` y que quede con dueño `root` en vez del tuyo:
+```bash
+sudo wget https://ejemplo.com/archivo.zip
+ls -la archivo.zip          # dice "root root"
+sudo chown giojar06 archivo.zip   # ahora es tuyo, editable sin sudo
+```
+- Servicios como PostgreSQL o MySQL requieren que ciertos archivos de configuración pertenezcan específicamente al usuario del servicio (`postgres`, `mysql`) — si el dueño está mal, el servicio ni siquiera arranca.
+- Carpetas compartidas entre colaboradores en un servidor, donde un archivo debe "pasar" de un usuario a otro.
 
 ### Redirección: `>` y `>>`
 
@@ -177,17 +193,32 @@ echo "Hola mundo" > saludo.txt    # > SOBRESCRIBE el archivo completo
 echo "Otra línea" >> saludo.txt   # >> AGREGA al final, sin borrar lo anterior
 ```
 
-Ejemplo práctico:
-```bash
-ls -la > lista_archivos.txt        # guarda el resultado de ls -la en un archivo
-ps aux >> registro_procesos.txt    # agrega el resultado de ps aux a un archivo existente
-```
-
 **Diferencia con el pipe `|`:**
 - `|` manda la salida de un comando **a otro comando** (ej. `ps aux | grep sleep`)
 - `>` / `>>` manda la salida de un comando **a un archivo**
 
 Se pueden combinar: `ps aux | grep bash >> resumen.txt` — primero filtra con `grep`, luego agrega ese resultado ya filtrado al archivo.
+
+**Casos prácticos reales:**
+- Guardar evidencia de un escaneo de red para revisar o incluir en un reporte (muy real en hacking ético):
+```bash
+nmap 192.168.0.1 > resultado_escaneo.txt
+```
+- Comparar el estado del sistema antes/después de algo:
+```bash
+ps aux > procesos_antes.txt
+# ... haces algo sospechoso de consumir memoria ...
+ps aux > procesos_despues.txt
+diff procesos_antes.txt procesos_despues.txt
+```
+- Agregar una línea de configuración rápida sin abrir editor:
+```bash
+echo "export PATH=$PATH:/nueva/ruta" >> ~/.bashrc
+```
+- Bitácora personal con fecha automática:
+```bash
+echo "$(date): instalé PostgreSQL" >> ~/bitacora.txt
+```
 
 ---
 
@@ -408,16 +439,38 @@ Muestra qué puertos están abiertos y **escuchando** (listening) en tu propia m
 
 ## 10. Git — flujo de trabajo y conceptos clave
 
-### Flujo básico establecido
+### La idea central de Git
 
-```bash
-git add .                          # prepara TODOS los cambios de la carpeta actual para el commit
-git status                         # confirma qué se detectó antes de comitear (buen hábito, siempre revisar)
-git commit -m "mensaje descriptivo" # guarda los cambios preparados con un mensaje
-git push                           # sube los cambios a GitHub
+Git es un sistema de **control de versiones**: guarda un historial de todos los cambios a tus archivos para poder ver qué cambió y cuándo, volver a una versión anterior si algo se rompe, y trabajar en equipo sin sobreescribir el trabajo de otros. Cada **commit** es como una "fotografía" del proyecto en un momento dado, con un mensaje explicando qué cambió.
+
+### Los 4 "lugares" donde viven tus archivos
+
+```
+[Directorio de trabajo]  →  [Staging Area]  →  [Repositorio local]  →  [GitHub (remoto)]
+     (tus archivos)          (git add)           (git commit)            (git push)
 ```
 
-**El punto `.` en `git add .`** significa "todo lo que esté en la carpeta actual y subcarpetas". Alternativas más específicas: `git add archivo.txt` (solo ese archivo) o `git add carpeta/` (solo esa carpeta).
+1. **Directorio de trabajo**: tus archivos normales en la carpeta
+2. **Staging area**: "sala de espera" donde marcas qué cambios quieres incluir en el próximo commit
+3. **Repositorio local**: historial guardado en tu propia máquina (carpeta oculta `.git`)
+4. **GitHub (remoto)**: copia en la nube
+
+### Comandos esenciales, en orden de uso típico
+
+```bash
+git status              # ¿qué cambió? ¿qué está listo para comitear? (usar SIEMPRE antes de actuar)
+git add archivo.txt      # prepara un archivo específico
+git add .                # prepara TODOS los cambios de la carpeta actual y subcarpetas
+git commit -m "mensaje"  # guarda los cambios preparados con una descripción
+git push                 # sube los commits locales a GitHub
+git pull                 # trae cambios nuevos desde GitHub a tu máquina
+git log --oneline        # ve el historial de commits, resumido (salir con "q")
+git restore archivo.txt  # descarta cambios locales no guardados aún, regresa a la última versión commiteada
+```
+
+**El punto `.` en `git add .`** significa "todo lo que esté en la carpeta actual y subcarpetas".
+
+**`git pull` — importante si trabajas desde varios lugares:** ya que se usa escritorio remoto y potencialmente se trabaja desde distintas máquinas, siempre correr `git pull` primero al empezar a trabajar en el repo, para tener la versión más reciente antes de modificar y evitar conflictos.
 
 ### Autenticación con Personal Access Token (PAT)
 
@@ -431,12 +484,37 @@ Nota de seguridad: esto guarda el token en texto plano en `~/.git-credentials` �
 
 ### Moverte entre carpetas y repositorios
 
-- Git busca automáticamente la carpeta `.git` en el directorio actual o en cualquier carpeta padre — puedes estar en una subcarpeta del repo y los comandos de Git funcionan igual.
-- Cada repositorio clonado es independiente; puedes tener varios en distintas carpetas sin que se mezclen.
-- Antes de hacer cambios, confirma en qué repo estás:
+- Git busca automáticamente la carpeta `.git` en el directorio actual o en cualquier carpeta padre — funciona igual estando en una subcarpeta del repo.
+- Cada repositorio clonado es independiente; se pueden tener varios en distintas carpetas sin que se mezclen.
+- Antes de hacer cambios, confirmar en qué repo se está:
 ```bash
-pwd            # tu ubicación actual
+pwd            # ubicación actual
 git remote -v  # a qué repositorio de GitHub está conectada esta carpeta
+```
+
+### Flujo completo para actualizar los apuntes (de principio a fin)
+
+Este es el flujo real usado para mantener los documentos de estudio sincronizados con GitHub:
+
+```bash
+# 1. Entrar al repositorio
+cd ~/practica_terminal/roadmap-ingenieria-seguridad
+
+# 2. Copiar los archivos nuevos descargados, sobrescribiendo los viejos
+cp /home/giojar06/Downloads/apuntes_linux_terminal.md /home/giojar06/Downloads/guia_estudio_ingenieria.md ./apuntes/
+
+# 3. Verificar qué cambió
+git status
+
+# 4. Preparar, comitear y subir
+git add .
+git commit -m "Actualiza apuntes con [tema visto]"
+git push
+```
+
+Si no se recuerda la ruta del repositorio:
+```bash
+find ~ -name "roadmap-ingenieria-seguridad" -type d
 ```
 
 ---
