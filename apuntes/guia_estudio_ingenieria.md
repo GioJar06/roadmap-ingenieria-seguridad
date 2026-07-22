@@ -119,27 +119,32 @@ Esta guía se actualiza conforme avanzas. El detalle técnico de cada tema (coma
 
 ### Track B — Bases de Datos
 
-**SQL básico**
-- [ ] `SELECT`, `WHERE`, `ORDER BY`, `LIMIT` (SQLZoo / HackerRank)
+**SQL básico** ✅ COMPLETADO
+- [x] `SELECT`, `WHERE`, `ORDER BY`, `LIMIT` (practicado con datos propios en PostgreSQL)
 
-**Relaciones y JOINs**
-- [ ] `INNER JOIN`, `LEFT JOIN`, claves primarias/foráneas
-- [ ] `GROUP BY`, `HAVING`, `COUNT`, `SUM`, `AVG`
+**Relaciones y JOINs** ✅ COMPLETADO
+- [x] `INNER JOIN`, `LEFT JOIN`, claves primarias/foráneas (`REFERENCES`)
+- [x] `GROUP BY`, `COUNT`, `AVG`, `MAX`, `MIN`
+- [ ] `HAVING` (pendiente)
 
-**Diseño de bases de datos**
+**Diseño de bases de datos** — pendiente
 - [ ] Normalización (1FN, 2FN, 3FN)
 - [ ] Diagramas Entidad-Relación
-- [ ] Diseño propio (ej. sistema de biblioteca)
+- [ ] Diseño propio más completo (ej. sistema de biblioteca)
 
-**Implementación**
-- [ ] Base de datos propia en PostgreSQL
-- [ ] Consultas complejas, subconsultas, vistas
+**Implementación** — parcial
+- [x] Base de datos propia en PostgreSQL (`practica_sql`, con tablas `estudiantes` y `materias` relacionadas)
+- [x] DBeaver instalado para visualización gráfica
+- [ ] Subconsultas, vistas
 
 **Checkpoint Track B:**
-- [ ] Escribo un JOIN sin ver ejemplos
-- [ ] Explico por qué normalizar una tabla
-- [ ] Tengo una base de datos propia funcionando
-- [ ] Entiendo qué es y por qué existe una clave foránea
+- [x] Escribo un JOIN sin ver ejemplos
+- [ ] Explico por qué normalizar una tabla (pendiente, aún no se ve normalización)
+- [x] Tengo una base de datos propia funcionando
+- [x] Entiendo qué es y por qué existe una clave foránea
+- [x] Distingo relación (clave foránea) de herencia en POO
+
+> Detalle completo con ejemplos: `apuntes_sql.md`
 
 ---
 
