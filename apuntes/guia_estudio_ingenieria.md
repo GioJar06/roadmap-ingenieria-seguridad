@@ -13,6 +13,24 @@ Esta guía se actualiza conforme avanzas. El detalle técnico de cada tema (coma
 
 ---
 
+## Orden de prioridad general (C++ → Python → Ciberseguridad)
+
+1. **Consolidar C++** (ya tienes la base) — repaso rápido de POO, no invertir de más aquí
+2. **Python** — siguiente prioridad real. Es el lenguaje que más se usa en hacking ético (scripts, automatización, retos de TryHackMe/HackTheBox). Como ya sabes POO en C++, se aprende por traducción de conceptos, no desde cero
+3. **Ciberseguridad/hacking ético formal** — después de tener Python básico, porque la mayoría de recursos y retos asumen que ya programas un poco para automatizar tareas y entender scripts de explotación
+
+## Recursos externos y dónde encajan
+
+| Recurso | Track / Fase donde se usa | Prioridad |
+|---------|---------------------------|-----------|
+| `30-Days-Of-Python` (GitHub) | Track C — material de apoyo estructurado para Python | Alta, en paralelo con SQL ahora |
+| Cisco NetAcad "Networking Basics" | Track A — complemento opcional para profundizar redes | Media, en paralelo ahora |
+| `90DaysOfCyberSecurity` (GitHub) | Fase 2-3 — ruta estructurada principal de hacking ético, junto con TryHackMe | Alta, pero después de Python básico |
+| roadmap.sh | Referencia general para ver qué falta, no un curso a seguir línea por línea | Consulta ocasional |
+| `ML-For-Beginners` (GitHub) | Fuera del roadmap actual — Machine Learning es una rama distinta a la meta actual | Baja — guardar para después de consolidar hacking ético + bases de datos |
+
+---
+
 ## Reparto semanal de horas (6-10 hrs/sem)
 
 | Track | Horas/sem | Enfoque |
@@ -76,6 +94,7 @@ Esta guía se actualiza conforme avanzas. El detalle técnico de cada tema (coma
 - [x] `ping`, `ip a`, `traceroute`, `netstat`
 - [x] Puerto, protocolo, IP pública vs privada, notación CIDR (`/24`)
 - [ ] Modelo TCP/IP y OSI completo, subnetting a profundidad (pendiente, se verá con Nmap)
+- [ ] Opcional: Cisco NetAcad "Networking Basics" (curso gratuito) para profundizar más allá de lo visto aquí
 
 **Extra cubierto (fuera del plan original, valioso para el día a día)**
 - [x] Atajos de teclado en Bash
@@ -134,6 +153,8 @@ Esta guía se actualiza conforme avanzas. El detalle técnico de cada tema (coma
 
 Por qué Python: es el lenguaje más usado en hacking ético — scripts de automatización, herramientas como Scapy, e integraciones con Nmap. La mayoría de retos en TryHackMe/HackTheBox asumen conocimiento básico de Python. Los conceptos de POO no cambian entre lenguajes, solo la sintaxis — esta transición debería ser rápida gracias a tu base en C++.
 
+**Recurso guía:** [30-Days-Of-Python](https://github.com/Asabeneh/30-Days-Of-Python) — úsalo como material estructurado principal en vez de ejercicios sueltos, es gratuito y ya probado.
+
 - [ ] Sintaxis básica: variables, funciones, estructuras de control
 - [ ] Clases y objetos en Python — comparar directamente con cómo se hace en C++
 - [ ] Reescribe en Python un proyecto pequeño que ya hiciste en C++ (acelera el aprendizaje por comparación directa)
@@ -191,6 +212,8 @@ Punto de partida: ya mantienes conversación fluida en inglés general. Este tra
 
 ## FASE 3 — Hacking ético formal
 
+**Recurso guía principal:** [90DaysOfCyberSecurity](https://github.com/farhanashrafdev/90DaysOfCyberSecurity) — úsalo como ruta estructurada, complementando TryHackMe. Requiere ya tener Python básico (Track C) para aprovecharlo bien.
+
 - [ ] TryHackMe: ruta "Jr Penetration Tester" o módulos gratuitos equivalentes
 - [ ] Herramientas core: **Nmap** (escaneo), **Wireshark** (tráfico), **Burp Suite Community** (web)
 - [ ] Practica en HackTheBox, nivel "Starting Point"
@@ -209,6 +232,12 @@ Punto de partida: ya mantienes conversación fluida en inglés general. Este tra
 - [ ] LinkedIn actualizado con proyectos y progreso
 - [ ] Al menos 1 certificado gratuito o de bajo costo (Google Cybersecurity Certificate, completions de TryHackMe)
 - [ ] Perfil visible en TryHackMe/HackTheBox con progreso real
+
+---
+
+## Futuro (después de consolidar la meta actual)
+
+- **Machine Learning** ([ML-For-Beginners](https://github.com/microsoft/ML-For-Beginners)) — rama interesante pero distinta a hacking ético + bases de datos. Guardar para cuando la meta actual esté sólida, no competir por tiempo ahora.
 
 ---
 
